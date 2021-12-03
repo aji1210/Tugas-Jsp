@@ -1,0 +1,351 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package aplikasi.kas;
+import java.awt.Dimension;
+import java.awt.Toolkit;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import javax.swing.JOptionPane;
+/**
+ *
+ * @author muham
+ */
+public class Mahasiswa extends javax.swing.JFrame {
+ private Connection con;
+    private Statement stat;
+    private ResultSet res;
+    /**
+     * Creates new form Mahasiswa
+     */
+    public Mahasiswa() {
+        initComponents();
+          initComponents();
+        setTitle("FORM MAHASISWA");
+        koneksi ();
+        kosongkan ();       
+    }
+private void koneksi (){
+     try {
+         Class.forName("com.mysql.jdbc.Driver");
+         con=DriverManager.getConnection("jdbc:mysql://127.0.0.1/aplikasikelas", "root", "");
+         stat=con.createStatement();
+         } catch (Exception e) {
+           JOptionPane.showMessageDialog(null, e);}   
+    }
+ private void kosongkan(){
+     fajri_nim.setText("");
+     fajri_nama.setText("");
+     fajri_jk.setSelectedIndex(-1);
+     fajri_nohp.setText("");
+     fajri_alamat.setText("");
+     fajri_nim.requestFocus();
+    }
+ private void fajri_nimActionPerformed(java.awt.event.ActionEvent evt) {                                          
+        // TODO add your handling code here:
+        try{
+            res=stat.executeQuery("select * from mahasiswa where "+ "Nim='" + fajri_nim.getText()
+                +"'" ); while (res.next())
+                { fajri_nama.setText(res.getString("Nama"));
+                fajri_jk.setSelectedItem(res.getString("JenisKelamin"));
+                fajri_nohp.setText(res.getString("NoHp"));
+                fajri_alamat.setText(res.getString("Alamat"));
+                }    
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(rootPane, e);
+        }
+    }
+ private void fajri_editActionPerformed(java.awt.event.ActionEvent evt) {                                           
+        // TODO add your handling code here:
+        int ok=JOptionPane.showConfirmDialog(null,"Apakah yakin ingin mengedit data?","Confirmation",
+                JOptionPane.YES_NO_OPTION);
+    try{
+    String sql = "update mahasiswa set Nim=?,Nama=?,JenisKelamin=?,NoHp=?,Alamat=? where Nim='"
+                    + fajri_nim.getText()+"'";
+    PreparedStatement st=con.prepareStatement(sql);
+    if(ok==0)
+    {
+    try{
+    st.setString(1,fajri_nim.getText());
+    st.setString(2,fajri_nama.getText());
+    st.setString(3,(String)fajri_jk.getSelectedItem());
+    st.setString(4,fajri_nohp.getText());
+    st.setString(5,fajri_alamat.getText());
+    st.executeUpdate();
+    kosongkan();
+    JOptionPane.showMessageDialog(null,"Edit Data Sukses");
+    new Mahasiswa().setVisible(true);
+    dispose();
+    }catch (Exception e)
+    {
+    JOptionPane.showMessageDialog(null, "Edit Data Gagal");
+    }
+    }
+    }catch (Exception e){}
+    }   
+ private void fajri_simpanActionPerformed(java.awt.event.ActionEvent evt) {                                             
+        // TODO add your handling code here:
+        try {
+         stat.executeUpdate("insert into mahasiswa values ("
+             + "'" + fajri_nim.getText()+"',"
+             + "'" + fajri_nama.getText()+"',"
+             + "'" + fajri_jk.getSelectedItem()+ "',"
+             + "'" + fajri_nohp.getText()+"',"
+             + "'" + fajri_alamat.getText()+"')");
+         kosongkan();
+         JOptionPane.showMessageDialog(null, "Berhasil Menyimpan Data");
+         new Mahasiswa().setVisible(true);
+         dispose();
+         } catch (Exception e) {
+         JOptionPane.showMessageDialog(null, "Gagal Menyimpan Data! : "+e);
+        }
+    }  
+  private void fajri_hapusActionPerformed(java.awt.event.ActionEvent evt) {                                            
+        // TODO add your handling code here:
+        int ok=JOptionPane.showConfirmDialog(null, "Apakah yakin ingin menghapus?", "Confirmation", 
+                JOptionPane.YES_NO_CANCEL_OPTION);
+        if (ok==0)
+        {
+         try{
+             String sql="delete from mahasiswa where Nim='"+fajri_nim.getText()+"'";
+             PreparedStatement st=con.prepareStatement (sql);
+             st.executeUpdate();
+             kosongkan();
+             JOptionPane.showMessageDialog(null, "Delete Data Sukses");
+             new Mahasiswa().setVisible(true);
+             dispose();
+         } catch (Exception e)
+         {
+             JOptionPane.showMessageDialog(null, "Delete Data Gagal");
+         }
+        }
+    }  
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
+     */
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
+
+        jPanel1 = new javax.swing.JPanel();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        fajri_nim = new javax.swing.JTextField();
+        fajri_nama = new javax.swing.JTextField();
+        fajri_nohp = new javax.swing.JTextField();
+        fajri_alamat = new javax.swing.JTextField();
+        fajri_jk = new javax.swing.JComboBox<>();
+        jLabel1 = new javax.swing.JLabel();
+        fajri_edit = new javax.swing.JButton();
+        fajri_hapus = new javax.swing.JButton();
+        fajri_simpan = new javax.swing.JButton();
+        fajri_search = new javax.swing.JButton();
+        fajri_lihat = new javax.swing.JButton();
+        fajri_menu = new javax.swing.JButton();
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        jPanel1.setBackground(new java.awt.Color(0, 0, 0));
+        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabel2.setBackground(new java.awt.Color(0, 0, 0));
+        jLabel2.setText("Nim");
+        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(18, 24, -1, -1));
+
+        jLabel3.setText("Nama");
+        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(18, 59, -1, -1));
+
+        jLabel4.setText("Jenis Kelamin");
+        jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(18, 106, -1, -1));
+
+        jLabel5.setText("No Handphone");
+        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(18, 150, -1, -1));
+
+        jLabel6.setText("Alamat");
+        jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(18, 191, -1, -1));
+        jPanel1.add(fajri_nim, new org.netbeans.lib.awtextra.AbsoluteConstraints(156, 17, 226, 30));
+        jPanel1.add(fajri_nama, new org.netbeans.lib.awtextra.AbsoluteConstraints(156, 59, 226, 29));
+        jPanel1.add(fajri_nohp, new org.netbeans.lib.awtextra.AbsoluteConstraints(156, 142, 226, 31));
+        jPanel1.add(fajri_alamat, new org.netbeans.lib.awtextra.AbsoluteConstraints(156, 191, 226, 28));
+
+        fajri_jk.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Laki-Laki", "Perempuan", " " }));
+        fajri_jk.setSelectedIndex(-1);
+        jPanel1.add(fajri_jk, new org.netbeans.lib.awtextra.AbsoluteConstraints(156, 100, 146, -1));
+
+        jLabel1.setText("TABEL MAHASISWA");
+
+        fajri_edit.setText("EDIT");
+
+        fajri_hapus.setText("HAPUS");
+
+        fajri_simpan.setText("SIMPAN");
+
+        fajri_search.setText("CARI");
+        fajri_search.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                fajri_searchActionPerformed(evt);
+            }
+        });
+
+        fajri_lihat.setText("LIHAT");
+
+        fajri_menu.setText("MENU");
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel1)
+                .addGap(220, 220, 220))
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 402, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(fajri_edit)
+                        .addGap(18, 18, 18)
+                        .addComponent(fajri_hapus)
+                        .addGap(18, 18, 18)
+                        .addComponent(fajri_simpan)
+                        .addGap(18, 18, 18)
+                        .addComponent(fajri_search)
+                        .addGap(18, 18, 18)
+                        .addComponent(fajri_lihat)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 70, Short.MAX_VALUE)
+                        .addComponent(fajri_menu)))
+                .addContainerGap())
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(25, 25, 25)
+                .addComponent(jLabel1)
+                .addGap(41, 41, 41)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 231, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(fajri_edit)
+                    .addComponent(fajri_hapus)
+                    .addComponent(fajri_simpan)
+                    .addComponent(fajri_search)
+                    .addComponent(fajri_lihat)
+                    .addComponent(fajri_menu))
+                .addContainerGap(101, Short.MAX_VALUE))
+        );
+
+        pack();
+    }// </editor-fold>//GEN-END:initComponents
+
+    private void fajri_searchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fajri_searchActionPerformed
+        // TODO add your handling code here:
+        try {
+            res=stat.executeQuery("select * from mahasiswa where "+ "Nim='" +fajri_nim.getText()
+            +"'" ); while (res.next())
+                { fajri_nama.setText(res.getString("Nama"));
+                fajri_jk.setSelectedItem(res.getString("JenisKelamin"));
+                fajri_nohp.setText(res.getString("NoHp"));
+                fajri_alamat.setText(res.getString("Alamat"));
+    }
+                }catch (Exception e) {
+                    JOptionPane.showMessageDialog(rootPane, e);
+                    }
+    }     
+    }//GEN-LAST:event_fajri_searchActionPerformed
+private void fajri_lihatActionPerformed(java.awt.event.ActionEvent evt) {                                            
+        // TODO add your handling code here:
+        new TableMahasiswa().setVisible(true);
+        dispose();
+    }                                           
+
+    private void fajri_menuActionPerformed(java.awt.event.ActionEvent evt) {                                           
+        // TODO add your handling code here:
+        new MenuUtama().setVisible(true);
+        dispose();
+    } 
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String args[]) {
+        /* Set the Nimbus look and feel */
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         */
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(Mahasiswa.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(Mahasiswa.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(Mahasiswa.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(Mahasiswa.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        //</editor-fold>
+
+        /* Create and display the form */
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new Mahasiswa().setVisible(true);
+            }
+        });
+    }
+private void fajri_nohpKeyTyped(java.awt.event.KeyEvent evt) {                                    
+        // TODO add your handling code here:
+        char fajri=evt.getKeyChar();
+        if(!(Character.isDigit(chika)))
+        {
+            evt.consume();
+        }
+    }                                   
+
+    private void fajri_nimKeyTyped(java.awt.event.KeyEvent evt) {                                   
+        // TODO add your handling code here:
+        char fajri=evt.getKeyChar();
+        if(!(Character.isDigit(chika)))
+        {
+            evt.consume();
+        }
+    }        
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTextField fajri_alamat;
+    private javax.swing.JButton fajri_edit;
+    private javax.swing.JButton fajri_hapus;
+    private javax.swing.JComboBox<String> fajri_jk;
+    private javax.swing.JButton fajri_lihat;
+    private javax.swing.JButton fajri_menu;
+    private javax.swing.JTextField fajri_nama;
+    private javax.swing.JTextField fajri_nim;
+    private javax.swing.JTextField fajri_nohp;
+    private javax.swing.JButton fajri_search;
+    private javax.swing.JButton fajri_simpan;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JPanel jPanel1;
+    // End of variables declaration//GEN-END:variables
+}
